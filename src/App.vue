@@ -1,50 +1,77 @@
 <template>
-	<!-- <div id="nav">
-		<router-link to="/">Home</router-link> |
-		<router-link to="/about">About</router-link>
-	</div> -->
-	<div id="app">
-		<router-view class="view" />
-	</div>
+	<v-app id="app">
+		<!-- <v-app-bar
+      app
+      color="primary"
+      dark
+    >
+      <div class="d-flex align-center">
+        <v-img
+          alt="Vuetify Logo"
+          class="shrink mr-2"
+          contain
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          transition="scale-transition"
+          width="40"
+        />
+
+        <v-img
+          alt="Vuetify Name"
+          class="shrink mt-1 hidden-sm-and-down"
+          contain
+          min-width="100"
+          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
+          width="100"
+        />
+      </div>
+
+      <v-spacer></v-spacer>
+
+      <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+        text
+      >
+        <span class="mr-2">Latest Release</span>
+        <v-icon>mdi-open-in-new</v-icon>
+      </v-btn>
+    </v-app-bar> -->
+
+		<!-- <v-main> -->
+		<router-view class="router-view" />
+		<!-- </v-main> -->
+	</v-app>
 </template>
+
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
+	name: "App",
+
+	data: () => ({
+		//
+	})
+});
+</script>
 
 <style lang="scss">
 @import url("https://rsms.me/inter/inter.css");
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap");
-:root {
-	font-size: 15px;
-}
-
-* {
-	margin: 0;
-	box-sizing: border-box;
-	font-family: "Inter";
-}
-
 #app {
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-
-	// background: rgb(36, 45, 59);
-	background: rgb(12, 10, 48);
-	background: linear-gradient(120deg, rgba(12, 10, 48, 1) 0%, rgba(21, 21, 84, 1) 35%, rgba(10, 89, 105, 1) 100%);
-
-	text-align: center;
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	color: #2c3e50;
-}
-
-.view {
-	min-width: 100vw;
+	// min-width: 100vw;
 	min-height: 100vh;
+	background: #282292;
+	background: linear-gradient(120deg, rgba(12, 10, 48, 1) 0%, rgba(21, 21, 84, 1) 35%, rgba(10, 89, 105, 1) 100%);
+	background-size: cover;
+	font-family: "Inter";
+	overflow-y: auto;
 }
-
-a {
-	text-decoration: none;
-	font-weight: 600;
-	color: rgb(63, 60, 133);
+.router-view {
+	overflow-y: auto;
+	// width: 100%;
+	// height: fit-content;
 }
-
 .button {
 	cursor: pointer;
 	margin: 1em;
@@ -54,17 +81,7 @@ a {
 	border-radius: 0.5em;
 	box-shadow: 0px 0px 3px gray;
 
-	font-size: 0.9rem;
+	// font-size: 0.9rem;
 	color: black;
-}
-
-.noselect {
-	-webkit-touch-callout: none; /* iOS Safari */
-	-webkit-user-select: none; /* Safari */
-	-khtml-user-select: none; /* Konqueror HTML */
-	-moz-user-select: none; /* Old versions of Firefox */
-	-ms-user-select: none; /* Internet Explorer/Edge */
-	user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
 }
 </style>

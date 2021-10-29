@@ -1,5 +1,6 @@
 <template>
 	<div id="callback">
+		<v-progress-linear v-if="!error_title" id="loader" color="light-blue" height="10" indeterminate></v-progress-linear>
 		<transition name="fade" mode="in-out">
 			<!-- <div v-if="error" class="box">
 				<h2>
@@ -85,11 +86,18 @@ export default class Callback extends Vue {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+
+	height: 100vh;
 }
 
 #error-box {
 	// background-color: black;
 	transition: 0.5s;
+}
+
+#loader {
+	position: absolute;
+	top: 0;
 }
 
 .fade-enter-active,

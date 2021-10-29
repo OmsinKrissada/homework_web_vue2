@@ -1,6 +1,6 @@
 
 module.exports = {
-	chainWebpack: config => {
+    chainWebpack: config => {
 		config
 			.plugin('html')
 			.tap(args => {
@@ -9,8 +9,12 @@ module.exports = {
 			});
 	},
 
-	// publicPath: "/minecraft/"
-	publicPath: '/homework',
+    // publicPath: "/minecraft/"
+    publicPath: '/homework',
 
-	assetsDir: 'assets'
+    assetsDir: 'assets',
+
+    transpileDependencies: [
+      'vuetify'
+    ]
 };

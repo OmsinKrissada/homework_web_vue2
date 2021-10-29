@@ -3,12 +3,10 @@
 		<img src="@/assets/book-dark.png" alt="logo" id="logo" />
 		<h2 id="title" class="noselect">Please signin to continue</h2>
 		<div id="form" class="noselect">
-			<a :href="auth_link">
-				<button class="button">
-					<img src="@/assets/icon_clyde_white_RGB.png" id="clyde" />
-					Continue with Discord
-				</button>
-			</a>
+			<v-btn :href="auth_link" class="button discord-login">
+				<img src="@/assets/icon_clyde_white_RGB.png" id="clyde" />
+				Continue with Discord
+			</v-btn>
 		</div>
 	</div>
 </template>
@@ -20,15 +18,10 @@ import { client_id } from "@/config.json";
 @Component({})
 export default class LoginForm extends Vue {
 	auth_link = "";
-	ready = false;
 	mounted() {
-		// axios.get(endpoint + "/client_id").then(res => {
-		// const client_id = (res.data as any).client_id;
 		this.auth_link = `https://discord.com/api/oauth2/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(
 			window.location.origin
 		)}%2Fhomework%2Fcallback&response_type=code&scope=identify+guilds&state=${encodeURIComponent("/dashboard")}`;
-		this.ready = true;
-		// });
 	}
 }
 </script>
@@ -67,33 +60,34 @@ $discord-blurple: #5865f2;
 
 	background-color: white;
 
+	text-align: center;
+
 	#form {
 		padding: 10px 40px;
 
-		button {
-			cursor: pointer;
-			pointer-events: none;
-
+		.discord-login {
 			display: flex;
 			align-items: center;
+
+			padding: 1.5em 2em;
 
 			background-color: $discord-blurple;
 			box-shadow: 0px 0px 3px $discord-blurple;
 
-			font-weight: 600;
+			text-transform: none;
+			// font-weight: 600;
 			color: white;
 
 			transition: 0.2s box-shadow;
 
-			&:hover {
-				box-shadow: none;
-			}
-
-			#clyde {
-				margin-right: 1em;
-				height: 1em;
-				width: auto;
-			}
+			// &:hover {
+			// 	box-shadow: none;
+			// }
+		}
+		#clyde {
+			margin-right: 1em;
+			height: 1em;
+			width: auto;
 		}
 	}
 }

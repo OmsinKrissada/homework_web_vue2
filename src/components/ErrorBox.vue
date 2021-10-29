@@ -3,7 +3,8 @@
 		<img :src="require('@/assets/' + icon)" alt="icon" v-if="icon" />
 		<h2 id="title">{{ title }}</h2>
 		<p>{{ description }}</p>
-		<button class="button" @click="back"><img src="@/assets/left-crop.png" />Go Back</button>
+		<!-- <v-btn elevation="2" class="button" @click="back"><v-icon left>mdi-chevron-left</v-icon> Back</v-btn> -->
+		<v-btn class="ma-2" text @click="back"> <v-icon left> mdi-arrow-left </v-icon>Back </v-btn>
 	</div>
 </template>
 
@@ -43,6 +44,8 @@ $discord-blurple: #5865f2;
 
 	background-color: white;
 
+	text-align: center;
+
 	#title {
 		// margin: 1em 1em 2em 1em;
 		margin-top: 1em;
@@ -66,22 +69,13 @@ $discord-blurple: #5865f2;
 	p {
 		margin: 0.5em;
 	}
-	.button {
-		display: flex;
-		justify-content: center;
-		align-items: center;
+	// .button {
+	// display: flex;
+	// align-items: center;
 
-		margin-bottom: 0px;
-
-		background-color: none;
-		box-shadow: 0px 0px 0px gray;
-
-		font-weight: 600;
-
-		img {
-			margin: 0 0.5em 0 0;
-			height: 1em;
-		}
-	}
+	// margin-top: 2em;
+	// box-shadow: 0px 0px 0px gray;
+	// font-weight: 600;
+	// }
 }
 </style>
