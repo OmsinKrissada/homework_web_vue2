@@ -15,12 +15,15 @@
 				class="table"
 				:headers="headers"
 				:items="show_ended ? homeworks : homeworks.filter(hw => !hw.deletedAt)"
+				sort-by="due"
 				:search="search"
 				:loading="loading"
-				hide-default-footer
 				:page.sync="page"
-				:items-per-page="10"
+				:items-per-page="15"
 				@page-count="page_count = $event"
+				show-expand
+				:single-expand="true"
+				hide-default-footer
 				dense
 			>
 				<template v-slot:top>
@@ -28,20 +31,7 @@
 						<h4>Homework</h4>
 						<v-tooltip right>
 							<template v-slot:activator="{ on, attrs }">
-								<v-btn
-									icon
-									text
-									:loading="refreshing"
-									class="ma-3"
-									@click="
-										refresh;
-										refresh_snackbar = true;
-									"
-									v-bind="attrs"
-									v-on="on"
-								>
-									<v-icon> mdi-refresh </v-icon></v-btn
-								>
+								<v-btn icon text :loading="refreshing" class="ma-3" @click="refresh" v-bind="attrs" v-on="on"> <v-icon> mdi-refresh </v-icon></v-btn>
 							</template>
 							<span>Refresh data</span>
 						</v-tooltip>
@@ -49,18 +39,78 @@
 						<v-text-field v-model="search" append-icon="mdi-magnify" label="Search" single-line></v-text-field>
 					</v-card-title>
 					<v-checkbox v-model="show_ended" label="Show ended homework" class="pa-3"></v-checkbox>
+					<!-- <v-dialog v-model="dialog" max-width="500px">
+							<template v-slot:activator="{ on, attrs }">
+								<v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
+									New Item
+								</v-btn>
+							</template>
+							<v-card>
+								<v-card-title>
+									<span class="text-h5">{{ formTitle }}</span>
+								</v-card-title>
+
+								<v-card-text>
+									<v-container>
+										<v-row>
+											<v-col cols="12" sm="6" md="4">
+												<v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+											</v-col>
+											<v-col cols="12" sm="6" md="4">
+												<v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+											</v-col>
+											<v-col cols="12" sm="6" md="4">
+												<v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+											</v-col>
+											<v-col cols="12" sm="6" md="4">
+												<v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+											</v-col>
+											<v-col cols="12" sm="6" md="4">
+												<v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+											</v-col>
+										</v-row>
+									</v-container>
+								</v-card-text>
+
+								<v-card-actions>
+									<v-spacer></v-spacer>
+									<v-btn color="blue darken-1" text @click="close">
+										Cancel
+									</v-btn>
+									<v-btn color="blue darken-1" text @click="save">
+										Save
+									</v-btn>
+								</v-card-actions>
+							</v-card>
+						</v-dialog> -->
+
+					<v-dialog v-model="dialog_delete" max-width="500px">
+						<v-card>
+							<v-card-title id="delete-title" class="justify-center">Do you want to delete this homework?</v-card-title>
+							<v-card-actions>
+								<v-spacer></v-spacer>
+								<v-btn class="ma-3" color="primary" text @click="clearDeleteDialog">Cancel</v-btn>
+								<v-btn class="ma-3" color="error" link @click="deleteHomework"> <v-icon left>mdi-delete</v-icon> Delete</v-btn>
+								<v-spacer></v-spacer>
+							</v-card-actions>
+						</v-card>
+					</v-dialog>
+				</template>
+
+				<template v-slot:item.actions="{ item }">
+					<!-- <v-icon small class="mr-2" @click="editItem(item)">
+						mdi-pencil
+					</v-icon> -->
+					<v-icon small color="red" @click="openDeleteDialog(item)"> mdi-delete </v-icon>
+				</template>
+				<template v-slot:item.data-table-expand="{ item, isExpanded, expand }">
+					<v-icon @click="expand(true)" v-if="item.detail && !isExpanded">mdi-chevron-down</v-icon>
+					<v-icon @click="expand(false)" v-if="item.detail && isExpanded">mdi-chevron-up</v-icon>
+				</template>
+				<template v-slot:expanded-item="{ headers, item }">
+					<td :colspan="headers.length" class="pa-3">{{ item.detail }}</td>
 				</template>
 			</v-data-table>
-
-			<!-- Temporary put the snackbar here... will be moved into Dashboard later -->
-			<v-snackbar color="info" v-model="refresh_snackbar">
-				Data Refreshed
-				<template v-slot:action="{ attrs }">
-					<v-btn text v-bind="attrs" @click="refresh_snackbar = false">
-						Close
-					</v-btn>
-				</template>
-			</v-snackbar>
 		</v-card>
 		<v-pagination v-model="page" :length="page_count" class="ma-3"></v-pagination>
 	</div>
@@ -68,6 +118,8 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import axios from "axios";
+import { endpoint } from "@/config.json";
 
 @Component({
 	props: {
@@ -79,54 +131,53 @@ export default class HomeworkTable extends Vue {
 	error = "";
 
 	refreshing = false;
-	refresh_snackbar = false;
 
 	search = "";
 	show_ended = false;
 	page = 1;
 	page_count = 0;
 
+	pending_delete_hw: any;
+	dialog_delete = false;
+
 	headers = [
-		{
-			text: "ID",
-			align: "start",
-			sortable: false,
-			value: "id"
-		},
-		{ text: "Title", value: "name" },
-		// { text: "Description", value: "detail" },
+		{ text: "ID", align: "start", value: "id" },
+		{ text: "Title", value: "title" },
 		{ text: "Subject", value: "subject" },
-		{ text: "Due", value: "due" }
+		{ text: "Due", value: "due" },
+		{ text: "Actions", value: "actions", sortable: false, align: "center" }
 	];
 
 	homeworks: any[];
 
 	async refresh() {
 		this.refreshing = true;
-		// try {
-		await this.getHomework();
-		// } catch (err) {
-		// 	console.error("failed to refresh: " + err);
-		// 	this.error = "Failed to refresh: " + err.message;
-		// }
+		this.$emit("updateHomework");
 		this.refreshing = false;
 	}
 
-	async getHomework() {
-		this.loading = true;
-		this.$emit("updateHomework");
-		this.loading = false;
+	openDeleteDialog(hw) {
+		this.pending_delete_hw = hw;
+		this.dialog_delete = true;
 	}
 
-	async mounted() {
-		// try {
-		// 	await this.getHomework();
-		// } catch (err) {
-		// 	console.error("failed to load table data: " + err);
-		// 	this.error = "Failed to load: " + err.message;
-		// }
+	clearDeleteDialog() {
+		this.pending_delete_hw = null;
+		this.dialog_delete = false;
+	}
 
-		this.loading = false;
+	deleteHomework() {
+		axios
+			.delete(endpoint + "/homeworks/" + this.pending_delete_hw.id, { headers: { Authorization: localStorage.homework_access_token } })
+			.then(() => {
+				this.$emit("deleted");
+			})
+			.catch(err => {
+				this.$emit("error", err);
+			})
+			.finally(() => {
+				this.dialog_delete = false;
+			});
 	}
 }
 </script>

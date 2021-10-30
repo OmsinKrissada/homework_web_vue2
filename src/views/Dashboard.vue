@@ -19,9 +19,18 @@
 			</v-alert>
 		</v-scroll-y-transition>
 		<div id="dashboard-container" v-show="!loading && !error && !warning">
-			<HomeworkTable :homeworks="homeworks" class="hw-table" @updateHomework="updateHomework" />
-			<CreationForm :subjects="subjects.map(hw => `${hw.name}`).sort()" class="form" />
+			<HomeworkTable :homeworks="homeworks" class="hw-table" @updateHomework="refreshHomework" @deleted="doDeleted" @error="msg => showSnack('Failed to delete: ' + msg, 'error')" />
+			<CreationForm :subjects="subjects" class="form" @submitted="doSubmitted" @error="msg => showSnack('Failed to submit: ' + msg, 'error')" />
+			<h3 class="calendar">Calendar coming soon ...</h3>
 		</div>
+		<v-snackbar :color="snackbar_color" v-model="snackbar_show">
+			{{ snackbar_msg }}
+			<template v-slot:action="{ attrs }">
+				<v-btn text v-bind="attrs" @click="snackbar_show = false">
+					Close
+				</v-btn>
+			</template>
+		</v-snackbar>
 		<v-overlay :value="loading">
 			<v-progress-circular indeterminate size="64"></v-progress-circular>
 		</v-overlay>
@@ -47,6 +56,10 @@ export default class Dashboard extends Vue {
 	error = "";
 	warning = "";
 
+	snackbar_show = false;
+	snackbar_color = "";
+	snackbar_msg = "";
+
 	subjects: any[] = [];
 	homeworks: any[] = [];
 
@@ -54,19 +67,39 @@ export default class Dashboard extends Vue {
 		location.reload();
 	}
 
+	showSnack(message: string, level: "info" | "success" | "warning" | "error" = "info") {
+		this.snackbar_color = level;
+		this.snackbar_show = true;
+		this.snackbar_msg = message;
+	}
+
+	async refreshHomework() {
+		await this.updateHomework();
+		this.showSnack("Data Refreshed");
+	}
+
+	doSubmitted() {
+		this.showSnack("Homework added successfully", "success");
+		this.updateHomework();
+	}
+
+	doDeleted() {
+		this.showSnack("Homework deleted successfully", "success");
+		this.updateHomework();
+	}
+
 	async updateHomework() {
 		console.log("called update hw");
 		let res;
 		try {
-			res = await axios.get(endpoint + "/list/full", { headers: { authorization: localStorage.homework_access_token } });
+			res = await axios.get(endpoint + "/homeworks", { headers: { Authorization: localStorage.homework_access_token } });
 		} catch (err) {
 			this.error = `Failed to refresh: ${err}`;
 		}
-		console.log(this.subjects);
 		(res.data as any).forEach((hw: any) => {
 			hw.subject = this.subjects.filter(s => s.subID == hw.subID)[0]?.name ?? "Unknown Subject";
-			hw.due = moment(hw.dueDate).format("LLL");
-			hw.detail = hw.detail || "-";
+			hw.due = hw.dueDate ? moment(hw.dueDate).format("LLL") : null;
+			hw.detail = hw.detail || null;
 		});
 		this.homeworks = res.data as any;
 	}
@@ -78,11 +111,7 @@ export default class Dashboard extends Vue {
 
 	async mounted() {
 		try {
-			this.subjects = ((await axios.get(endpoint + "/subjects", {
-				headers: {
-					authorization: localStorage.homework_access_token
-				}
-			})) as any).data;
+			this.subjects = ((await axios.get(endpoint + "/subjects", { headers: { Authorization: localStorage.homework_access_token } })) as any).data;
 			await this.updateHomework();
 		} catch (err) {
 			if (!axios.isAxiosError(err)) {
@@ -103,7 +132,7 @@ export default class Dashboard extends Vue {
 #dashboard {
 	position: relative;
 	margin: 50px 30px;
-	background-color: whitesmoke;
+	background-color: rgba(245, 245, 245, 0.3);
 
 	#dashboard-container {
 		position: relative;
@@ -137,6 +166,21 @@ export default class Dashboard extends Vue {
 				width: 90vw;
 			}
 		}
+
+		.calendar {
+			// position: sticky;
+			grid-column: 1 / -1;
+			// margin: 2em;
+			width: 400px;
+			height: fit-content;
+			color: white;
+			@media screen and (max-width: 1400px) {
+				grid-column: none;
+				min-width: none;
+				width: 90vw;
+			}
+		}
+
 		@media screen and (max-width: 1400px) {
 			top: 0;
 			justify-content: center;
@@ -145,7 +189,7 @@ export default class Dashboard extends Vue {
 	@media screen and (max-width: 1400px) {
 		top: 0;
 		margin: 0;
-		background: transparent;
+		// background: transparent;
 	}
 }
 </style>
