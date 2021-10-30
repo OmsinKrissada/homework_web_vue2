@@ -121,6 +121,8 @@ export default class Dashboard extends Vue {
 			} else if (err.response.status == 401) {
 				this.warning = "Session expired. Please click the button on the right if redirect doesn't happen automatically.";
 				this.logout();
+			} else if (err.response.status == 502) {
+				this.warning = "API endpoint is down, please report this back to Omsin.";
 			}
 		}
 		this.loading = false;
