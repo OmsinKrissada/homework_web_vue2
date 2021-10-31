@@ -149,7 +149,11 @@ export default class CreationForm extends Vue {
 						title: this.title,
 						detail: this.detail,
 						subject: this.subject,
-						dueDate: this.appendTime(new Date(this.date), this.time)
+						dueDate: this.time
+							? this.appendTime(new Date(this.date), this.time)
+							: moment(this.date)
+									.endOf("date")
+									.toDate()
 					},
 					{ headers: { Authorization: localStorage.homework_access_token } }
 				)
