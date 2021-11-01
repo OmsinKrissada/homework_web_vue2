@@ -1,5 +1,11 @@
 <template>
-	<v-card id="dashboard" elevation="5" outlined :style="loading && 'background-color: transparent; box-shadow: none; border: none;'">
+	<v-card
+		id="dashboard"
+		elevation="5"
+		outlined
+		:style="loading && 'background-color: transparent; box-shadow: none; border: none;'"
+		:class="{ glass: !$vuetify.theme.dark, opaque: $vuetify.theme.dark }"
+	>
 		<v-scroll-y-transition>
 			<v-alert v-if="error" type="error" class="ma-5" prominent>
 				<v-row align="center">
@@ -131,10 +137,17 @@ export default class Dashboard extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.glass {
+	background-color: rgba(245, 245, 245, 0.3);
+}
+
+.opaque {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
 #dashboard {
 	position: relative;
 	margin: 50px 30px;
-	background-color: rgba(245, 245, 245, 0.3);
 
 	#dashboard-container {
 		position: relative;

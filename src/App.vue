@@ -1,5 +1,5 @@
 <template>
-	<v-app id="app">
+	<v-app :style="{ background: backgroundColor }">
 		<!-- <v-app-bar
       app
       color="primary"
@@ -38,21 +38,41 @@
     </v-app-bar> -->
 
 		<!-- <v-main> -->
+		<NavBar v-if="this.$route.path == '/dashboard'" class="ma-5" />
 		<router-view class="router-view" />
 		<!-- </v-main> -->
 	</v-app>
 </template>
 
 <script lang="ts">
+// import { Component, Vue } from "vue-property-decorator";
 import Vue from "vue";
+import NavBar from "@/components/NavBar.vue";
 
 export default Vue.extend({
 	name: "App",
-
-	data: () => ({
-		//
-	})
+	components: {
+		NavBar
+	},
+	computed: {
+		backgroundColor() {
+			return this.$vuetify.theme.dark ? "#001329" : "linear-gradient(120deg, rgba(12, 10, 48, 1) 0%, rgba(21, 21, 84, 1) 35%, rgba(10, 89, 105, 1) 100%)";
+		}
+	}
 });
+// @Component({})
+// export default class App extends Vue {
+// background_color = this.$vuetify.theme.dark ? "rgba(200, 200, 200, 0.486)" : "linear-gradient(120deg, rgba(12, 10, 48, 1) 0%, rgba(21, 21, 84, 1) 35%, rgba(10, 89, 105, 1) 100%);";
+// themeBackground = {
+// 	background:
+// };
+// 	backgroundColor = null;
+// 	computed() {
+// 		this.backgroundColor = () => {
+// 			return this.$vuetify.theme.dark ? "rgba(200, 200, 200, 0.486)" : "linear-gradient(120deg, rgba(12, 10, 48, 1) 0%, rgba(21, 21, 84, 1) 35%, rgba(10, 89, 105, 1) 100%)";
+// 		};
+// 	}
+// }
 </script>
 
 <style lang="scss">
@@ -61,17 +81,18 @@ export default Vue.extend({
 #app {
 	// min-width: 100vw;
 	min-height: 100vh;
-	background: #282292;
-	background: linear-gradient(120deg, rgba(12, 10, 48, 1) 0%, rgba(21, 21, 84, 1) 35%, rgba(10, 89, 105, 1) 100%);
 	background-size: cover;
 	font-family: "Inter";
 	overflow-y: auto;
+	// background: #282292;
 }
+
 .router-view {
 	overflow-y: auto;
 	// width: 100%;
 	// height: fit-content;
 }
+
 .button {
 	cursor: pointer;
 	margin: 1em;

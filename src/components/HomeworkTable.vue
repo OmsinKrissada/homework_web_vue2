@@ -191,7 +191,7 @@ export default class HomeworkTable extends Vue {
 
 	transition: 0.5s;
 }
-.table {
-	transition: 0.5s;
-}
+// .table {
+// 	transition: 0.5s;
+// }
 </style>

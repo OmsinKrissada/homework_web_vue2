@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import Home from '../views/Home.vue';
 import Login from '../views/Login.vue';
-import Callback from '../views/Callback.vue';
 
 Vue.use(VueRouter);
 
@@ -10,12 +8,15 @@ const routes: Array<RouteConfig> = [
   {
     path: '/',
     component: Login,
-    // beforeEnter:entranceCheck
+    beforeEnter: (to, from, next) => {
+      if (localStorage['homework_access_token']) return next('/dashboard');
+      else return next();
+    }
   },
   {
     path: '/callback',
     name: 'Callback',
-    component: Callback
+    component: () => import(/* webpackChunkName: "about" */ '../views/Callback.vue')
   },
   {
     path: '/dashboard',
