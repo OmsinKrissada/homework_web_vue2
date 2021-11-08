@@ -80,9 +80,6 @@ export default class NavBar extends Vue {
 	set_darktheme = null;
 
 	mounted() {
-		console.log(this.set_darktheme);
-		console.log("local=" + localStorage.getItem("homework_settings_darktheme"));
-
 		this.set_darktheme = localStorage.getItem("homework_settings_darktheme") == "true" ? true : false;
 		this.$vuetify.theme.dark = this.set_darktheme;
 	}
