@@ -15,6 +15,7 @@ export default new Vuetify({
 				// warning: '#ffc936',
 				// error: '#b71c1c',
 				error: '#f05b5b',
+				scroll_track: '#a9b9ff'
 			},
 			dark: {
 				// 	// primary: '#0c0a30',
@@ -23,6 +24,7 @@ export default new Vuetify({
 				accent: '#2a3952',
 				// 	// error: '#b71c1c',
 				// 	error: '#f05b5b',
+				scroll_track: '#007cd6'
 			},
 		},
 		options: {

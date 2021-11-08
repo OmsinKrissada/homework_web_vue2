@@ -135,7 +135,7 @@ export default Vue.extend({
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-	background: var(--v-primary-darken1);
+	background: var(--v-scroll_track-base);
 	border-radius: 50px;
 }
 </style>
