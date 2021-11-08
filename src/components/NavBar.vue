@@ -46,21 +46,26 @@
 
 					<v-list-item disabled>
 						<v-list-item-action>
-							<v-checkbox v-model="notify_1m"></v-checkbox>
+							<v-checkbox v-model="notify_5m"></v-checkbox>
 						</v-list-item-action>
 						<v-list-item-title>Notify 5 minutes before deadline</v-list-item-title>
 					</v-list-item>
 
 					<v-list-item disabled>
 						<v-list-item-action>
-							<v-checkbox v-model="notify_1m"></v-checkbox>
+							<v-checkbox v-model="notify_1h"></v-checkbox>
 						</v-list-item-action>
 						<v-list-item-title>Notify 1 hour before deadline</v-list-item-title>
 					</v-list-item>
 					<v-subheader>Account</v-subheader>
 					<v-list-item>
 						<v-list-item-content>
-							<v-list-item-title> <v-icon left>mdi-account</v-icon> Logged in as <strong>Omsin#5128</strong></v-list-item-title>
+							<v-list-item-title>
+								<v-avatar size="2em" class="avatar">
+									<img :src="`https://cdn.discordapp.com/avatars/${user_id}/${user_avatar}.jpg`" :alt="user_tag" />
+								</v-avatar>
+								Logged in as <strong>{{ user_tag }}</strong>
+							</v-list-item-title>
 							<!-- <v-list-item-subtitle>Toggles between light and dark mode.</v-list-item-subtitle> -->
 						</v-list-item-content>
 						<v-btn color="error" text @click="logout">Logout</v-btn>
@@ -79,13 +84,22 @@ export default class NavBar extends Vue {
 	dialog = false;
 	set_darktheme = null;
 
+	notify_all = false;
+	notify_1m = false;
+	notify_5m = false;
+	notify_1h = false;
+
+	user_tag = localStorage["user_tag"];
+	user_id = localStorage["user_id"];
+	user_avatar = localStorage["user_avatar"];
+
 	mounted() {
 		this.set_darktheme = localStorage.getItem("homework_settings_darktheme") == "true" ? true : false;
 		this.$vuetify.theme.dark = this.set_darktheme;
 	}
 
 	logout() {
-		localStorage.removeItem("homework_access_token");
+		localStorage.removeItem("access_token");
 		this.$router.push("/");
 		this.dialog = false;
 	}
@@ -99,4 +113,8 @@ export default class NavBar extends Vue {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.avatar {
+	margin-right: 10px;
+}
+</style>

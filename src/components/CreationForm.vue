@@ -155,7 +155,7 @@ export default class CreationForm extends Vue {
 									.endOf("date")
 									.toDate()
 					},
-					{ headers: { Authorization: localStorage.homework_access_token } }
+					{ headers: { Authorization: localStorage.access_token } }
 				)
 				.then(() => {
 					this.$emit("submitted");

@@ -98,7 +98,7 @@ export default class Dashboard extends Vue {
 		console.log("called update hw");
 		let res;
 		try {
-			res = await axios.get(endpoint + "/homeworks", { headers: { Authorization: localStorage.homework_access_token } });
+			res = await axios.get(endpoint + "/homeworks", { headers: { Authorization: localStorage.access_token } });
 		} catch (err) {
 			this.error = `Failed to refresh: ${err}`;
 		}
@@ -111,13 +111,13 @@ export default class Dashboard extends Vue {
 	}
 
 	logout() {
-		localStorage.removeItem("homework_access_token");
+		localStorage.removeItem("access_token");
 		this.$router.replace("/");
 	}
 
 	async mounted() {
 		try {
-			this.subjects = ((await axios.get(endpoint + "/subjects", { headers: { Authorization: localStorage.homework_access_token } })) as any).data;
+			this.subjects = ((await axios.get(endpoint + "/subjects", { headers: { Authorization: localStorage.access_token } })) as any).data;
 			await this.updateHomework();
 		} catch (err) {
 			if (!axios.isAxiosError(err)) {

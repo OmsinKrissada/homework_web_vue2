@@ -74,8 +74,10 @@ export default class Callback extends Vue {
 			return;
 		}
 
-		const { access_token } = response;
-		localStorage.setItem("homework_access_token", access_token);
+		// const { access_token } = response;
+		for (const key in response) {
+			localStorage.setItem(key, response[key]);
+		}
 		router.push(decodeURIComponent(params.state));
 	}
 }

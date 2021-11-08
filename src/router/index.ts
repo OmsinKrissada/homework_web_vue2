@@ -9,7 +9,7 @@ const routes: Array<RouteConfig> = [
     path: '/',
     component: Login,
     beforeEnter: (to, from, next) => {
-      if (localStorage['homework_access_token']) return next('/dashboard');
+      if (localStorage['access_token']) return next('/dashboard');
       else return next();
     }
   },

@@ -175,7 +175,7 @@ export default class HomeworkTable extends Vue {
 
 	deleteHomework() {
 		axios
-			.delete(endpoint + "/homeworks/" + this.pending_delete_hw.id, { headers: { Authorization: localStorage.homework_access_token } })
+			.delete(endpoint + "/homeworks/" + this.pending_delete_hw.id, { headers: { Authorization: localStorage.access_token } })
 			.then(() => {
 				this.$emit("deleted");
 			})
