@@ -16,14 +16,14 @@ export default new Vuetify({
 				// error: '#b71c1c',
 				error: '#f05b5b',
 			},
-			// dark: {
-			// 	// primary: '#0c0a30',
-			// 	primary: '#282292',
-			// 	secondary: '#b0bec5',
-			// 	accent: '#8c9eff',
-			// 	// error: '#b71c1c',
-			// 	error: '#f05b5b',
-			// },
+			dark: {
+				// 	// primary: '#0c0a30',
+				// 	primary: '#282292',
+				// 	secondary: '#b0bec5',
+				accent: '#2a3952',
+				// 	// error: '#b71c1c',
+				// 	error: '#f05b5b',
+			},
 		},
 		options: {
 			customProperties: true

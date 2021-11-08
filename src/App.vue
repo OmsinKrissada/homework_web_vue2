@@ -40,6 +40,19 @@
 		<!-- <v-main> -->
 		<NavBar v-if="this.$route.path == '/dashboard'" class="ma-5" />
 		<router-view class="router-view" />
+		<v-footer dark padless class="ma-6 transparent">
+			<v-row justify="center">
+				<v-col cols="12" class="text-center"><v-divider></v-divider></v-col>
+				<v-col cols="12" class="text-center"
+					><small
+						>Commit — <span class="code">{{ hash }}</span></small
+					></v-col
+				>
+
+				<v-col cols="12" class="text-center"><v-icon small>mdi-copyright</v-icon> {{ new Date().getFullYear() }} <strong>Krissada Singhakachain</strong>. All rights reserved.</v-col>
+			</v-row>
+		</v-footer>
+
 		<!-- </v-main> -->
 	</v-app>
 </template>
@@ -48,11 +61,20 @@
 // import { Component, Vue } from "vue-property-decorator";
 import Vue from "vue";
 import NavBar from "@/components/NavBar.vue";
+import { commit_hash } from "./config.json";
 
 export default Vue.extend({
 	name: "App",
 	components: {
 		NavBar
+	},
+	data: () => {
+		return {
+			hash: commit_hash
+		};
+	},
+	mounted: () => {
+		console.log();
 	},
 	computed: {
 		backgroundColor() {
@@ -60,19 +82,6 @@ export default Vue.extend({
 		}
 	}
 });
-// @Component({})
-// export default class App extends Vue {
-// background_color = this.$vuetify.theme.dark ? "rgba(200, 200, 200, 0.486)" : "linear-gradient(120deg, rgba(12, 10, 48, 1) 0%, rgba(21, 21, 84, 1) 35%, rgba(10, 89, 105, 1) 100%);";
-// themeBackground = {
-// 	background:
-// };
-// 	backgroundColor = null;
-// 	computed() {
-// 		this.backgroundColor = () => {
-// 			return this.$vuetify.theme.dark ? "rgba(200, 200, 200, 0.486)" : "linear-gradient(120deg, rgba(12, 10, 48, 1) 0%, rgba(21, 21, 84, 1) 35%, rgba(10, 89, 105, 1) 100%)";
-// 		};
-// 	}
-// }
 </script>
 
 <style lang="scss">
@@ -93,6 +102,14 @@ export default Vue.extend({
 	// height: fit-content;
 }
 
+.code {
+	font-family: "Consolas", monospace;
+}
+
+.footer {
+	// background-color: rgba(255, 255, 255, 0.158);
+}
+
 .button {
 	cursor: pointer;
 	margin: 1em;
@@ -104,5 +121,21 @@ export default Vue.extend({
 
 	// font-size: 0.9rem;
 	color: black;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: var(--v-accent-darken4);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: var(--v-primary-darken1);
+	border-radius: 50px;
 }
 </style>

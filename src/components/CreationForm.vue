@@ -22,9 +22,9 @@
 					hint="Multiline support"
 					rows="1"
 					auto-grow
-					counter="150"
-					:rules="[() => !detail || detail.length <= 150 || 'Maximum is 150 characters']"
-					maxlength="150"
+					counter="300"
+					:rules="[() => !detail || detail.length <= 300 || 'Maximum is 300 characters']"
+					maxlength="300"
 					clearable
 					clear-icon="mdi-close-circle"
 					label="Detail"

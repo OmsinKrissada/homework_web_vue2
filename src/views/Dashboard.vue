@@ -117,7 +117,7 @@ export default class Dashboard extends Vue {
 
 	async mounted() {
 		try {
-			this.subjects = ((await axios.get(endpoint + "/subjects", { headers: { Authorization: localStorage.access_token } })) as any).data;
+			this.subjects = ((await axios.get(endpoint + "/subjects", { headers: { Authorization: localStorage.access_token } })) as any).data.sort((s1, s2) => s1.name.localeCompare(s2.name));
 			await this.updateHomework();
 		} catch (err) {
 			if (!axios.isAxiosError(err)) {
