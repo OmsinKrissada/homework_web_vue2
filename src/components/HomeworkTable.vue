@@ -118,6 +118,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import { DataTableHeader } from "vuetify";
 import axios from "axios";
 import { endpoint } from "@/config.json";
 
@@ -140,11 +141,17 @@ export default class HomeworkTable extends Vue {
 	pending_delete_hw: any;
 	dialog_delete = false;
 
-	headers = [
+	sortDueDate = (a: string, b: string) => {
+		if (!a) return 1;
+		if (!b) return -1;
+		return new Date(a).valueOf() - new Date(b).valueOf();
+	};
+
+	headers: DataTableHeader[] = [
 		{ text: "ID", align: "start", value: "id" },
 		{ text: "Title", value: "title" },
 		{ text: "Subject", value: "subject" },
-		{ text: "Due", value: "due" },
+		{ text: "Due", value: "due", sort: this.sortDueDate },
 		{ text: "Actions", value: "actions", sortable: false, align: "center" }
 	];
 
