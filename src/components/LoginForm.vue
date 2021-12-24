@@ -21,7 +21,7 @@ export default class LoginForm extends Vue {
 	mounted() {
 		this.auth_link = `https://discord.com/api/oauth2/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(
 			window.location.origin
-		)}%2Fhomework%2Fcallback&response_type=code&scope=identify+guilds&state=${encodeURIComponent("/dashboard")}`;
+		)}%2Fcallback&response_type=code&scope=identify+guilds&state=${encodeURIComponent("/dashboard")}`;
 	}
 }
 </script>

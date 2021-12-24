@@ -9,9 +9,6 @@ module.exports = {
 			});
 	},
 
-	// publicPath: "/minecraft/"
-	publicPath: '/homework',
-
 	assetsDir: 'assets',
 
 	transpileDependencies: [
