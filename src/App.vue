@@ -111,16 +111,43 @@ export default Vue.extend({
 }
 
 .button {
+	position: relative;
 	cursor: pointer;
 	margin: 1em;
 	padding: 1em 2em;
 	// background: none;
 	border: none;
-	border-radius: 0.5em;
-	box-shadow: 0px 0px 3px gray;
 
 	// font-size: 0.9rem;
 	color: black;
+
+	overflow: hidden;
+}
+
+.button * {
+	z-index: 10;
+}
+
+.button .btn-hover-effect {
+	color: hsl(235, 86%, 65%);
+	// color: #7a93f5;
+	color: hsl(211, 100%, 49%);
+	color: hsl(204, 100%, 66%);
+	z-index: 5;
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	background: radial-gradient(circle closest-side, hsl(221, 100%, 70%), transparent);
+	transform: translate(-50%, -50%);
+	transition: width 0.2s ease, height 0.2s ease;
+}
+
+.button:hover .btn-hover-effect {
+	width: 300px;
+	height: 300px;
 }
 
 /* width */

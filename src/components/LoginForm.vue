@@ -18,10 +18,26 @@ import { client_id } from "@/config.json";
 @Component({})
 export default class LoginForm extends Vue {
 	auth_link = "";
-	mounted() {
+	created() {
 		this.auth_link = `https://discord.com/api/oauth2/authorize?client_id=${client_id}&redirect_uri=${encodeURIComponent(
 			window.location.origin
 		)}%2Fcallback&response_type=code&scope=identify+guilds&state=${encodeURIComponent("/dashboard")}`;
+	}
+
+	mounted() {
+		for (const b of document.getElementsByClassName("button")) {
+			const child = document.createElement("span");
+			child.className = "btn-hover-effect";
+			b.appendChild(child);
+			(b as any).onmousemove = function(b) {
+				console.log("changing");
+
+				var e = b.currentTarget.getBoundingClientRect(),
+					s = b.clientX - e.left,
+					a = b.clientY - e.top;
+				(child.style.left = s + "px"), (child.style.top = a + "px");
+			};
+		}
 	}
 }
 </script>
@@ -72,7 +88,7 @@ $discord-blurple: #5865f2;
 			padding: 1.5em 2em;
 
 			background-color: $discord-blurple;
-			box-shadow: 0px 0px 3px $discord-blurple;
+			// box-shadow: 0px 0px 3px $discord-blurple;
 
 			text-transform: none;
 			// font-weight: 600;
@@ -90,5 +106,21 @@ $discord-blurple: #5865f2;
 			width: auto;
 		}
 	}
+}
+// .button:hover{
+
+// }
+
+.btn-hover-effect {
+	z-index: 5;
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	background: radial-gradient(circle closest-side, #6773f3, transparent);
+	transform: translate(-50%, -50%);
+	transition: width 0.2s ease, height 0.2s ease;
 }
 </style>
