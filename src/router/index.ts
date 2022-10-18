@@ -14,7 +14,7 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
-    path: '/callback',
+    path: '/callback/discord',
     name: 'Callback',
     component: () => import(/* webpackChunkName: "about" */ '../views/Callback.vue')
   },
